@@ -1,7 +1,7 @@
 importScripts('js/sw-utils.js');
 const STATIC_CACHE='static-v4';
-const STATIC_DYNAMIC='dynamic-v2';
-const STATIC_INMUTABLE='inmutable-v1';
+const DYNAMIC_CACHE='dynamic-v4';
+const INMUTABLE_CACHE='inmutable-v1';
 
 const APP_SHELL=[
    // '/',
@@ -30,7 +30,7 @@ self.addEventListener('install',e=>{
 const cacheStatic= caches.open(STATIC_CACHE).then( cache=>{
     cache.addAll(APP_SHELL);
 });
-const cacheInmutable= caches.open(STATIC_INMUTABLE).then( cache=>{
+const cacheInmutable= caches.open(INMUTABLE_CACHE).then( cache=>{
     cache.addAll(APP_SHELL_INMUTABLE);
 });
 
@@ -45,7 +45,7 @@ self.addEventListener('activate',e=>{
                 if(key!==STATIC_CACHE &&  key.includes('static')){
                     return caches.delete(key);
                 }
-                if(key!==STATIC_DYNAMIC &&  key.includes('dynamic')){
+                if(key!==DYNAMIC_CACHE &&  key.includes('dynamic')){
                     return caches.delete(key);
                 }
         });
@@ -60,7 +60,7 @@ self.addEventListener('fetch', e =>{
                             return res;
                         }else{
                            return fetch(e.request).then(newRes=>{
-                                return actualizaCacheDynamico(STATIC_DYNAMIC,e.request,newRes);
+                                return actualizaCacheDynamico(DYNAMIC_CACHE,e.request,newRes);
                            });
                         }
           
